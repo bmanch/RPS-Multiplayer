@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Rock | Paper | Scissors</title>
+	<link rel="stylesheet" type="text/css" href="assets/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="assets/css/style.css">
+</head>
+<body>
+	<div class="container">
+
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="jumbotron text-center">
+				  <h1>Rock | Paper | Scissors</h1>
+				  <br>
+				  <p>defeat your nemesis</p>
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-sm-offset-3 col-sm-6">
+				<div class="panel panel-primary" id="join">
+				  <div class="panel-heading">
+				    <h3 class="panel-title text-center">Join a Game</h3>
+				  </div>
+				  <div class="panel-body">
+				    <div class="input-group">
+				      <input type="text" class="form-control" placeholder="Enter your name" id="player">
+				      <span class="input-group-btn">
+				        <button class="btn btn-default" type="button" id="joinButton">Join</button>
+				      </span>
+				    </div>
+				  </div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row text-center">
+			<div class="col-sm-4">
+				<div class="panel panel-info" data-normal="panel panel-info" data-turn="panel panel-warning" data-win="panel panel-success" data-loss="panel panel-danger" data-status="normal">
+				  <div class="panel-heading">
+				    <h3 class="panel-title" id="firstPlayer">Player 1</h3>
+				  </div>
+				  <div class="panel-body">
+				  	<div class="row">
+					    <img class="options pick1" src="assets/images/rock.png" alt="rock" data-type="rock">
+					    <img class="options pick1" src="assets/images/paper.png" alt="paper" data-type="paper">
+					    <img class="options pick1" src="assets/images/scissors.png" alt="scissors" data-type="scissors">
+					</div>
+					<div class="row" id="play1">
+					</div>
+					<div class="row" id="turnOdd">
+					</div>
+					<div class="row" id="yourChoice1">
+					</div>
+				  </div>
+				</div>
+			</div>
+			<div class="col-sm-4">
+				<div class="panel panel-primary" data-normal="panel-panel-primary" data-result="panel panel-info" data-status="normal">
+				  <div class="panel-heading">
+				    <h3 class="panel-title" id="round">Game Results</h3>
+				  </div>
+				  <div class="panel-body" id="results">
+				    Panel content
+				  </div>
+				</div>
+			</div>
+			<div class="col-sm-4">
+				<div class="panel panel-info" data-normal="panel panel-info" data-turn="panel panel-warning" data-win="panel panel-success" data-loss="panel panel-danger" data-status="normal">
+				  <div class="panel-heading">
+				    <h3 class="panel-title" id="secondPlayer">Player 2</h3>
+				  </div>
+				  <div class="panel-body">
+				  	<div class="row">
+					    <img class="options pick2" src="assets/images/rock.png" alt="rock" data-type="rock">
+					    <img class="options pick2" src="assets/images/paper.png" alt="paper" data-type="paper">
+					    <img class="options pick2" src="assets/images/scissors.png" alt="scissors" data-type="scissors">
+					</div>
+					<div class="row" id="play2">
+					</div>
+					<div class="row" id="turnEven">
+					</div>
+					<div class="row" id="yourChoice2">
+					</div>
+				  </div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-sm-offset-2 col-sm-8">
+				<div class="panel panel-primary" id="chat">
+				  <div class="panel-heading">
+				    <h3 class="panel-title text-center">Get in their head...</h3>
+				  </div>
+				  <div class="panel-body">
+				    <div class="input-group" id="input">
+				      <input type="text" class="form-control" placeholder="Chat...">
+				      <span class="input-group-btn">
+				        <button class="btn btn-default" type="button">Send</button>
+				      </span>
+				    </div>
+				  </div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<nav class="navbar navbar-default navbar-fixed-bottom text-center" id="footer">
+		<div class="container text-center" id="footerText">
+	    	&copy; Copyright 2017 Brian Manchester
+	    	<br>
+	    	Enjoyed the experience? See more work by the same developer <a href="https://bmanch.github.io/Bootstrap-Portfolio/" target="blank">here</a>.
+	    	<br>
+	    	The rock, paper, and scissors icons were created by Studio Fibonacci from Noun Project.
+	    </div>
+	</nav>
+
+	<script
+	  src="https://code.jquery.com/jquery-3.2.1.js"
+	  integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="
+	  crossorigin="anonymous"></script>
+	<script src="https://www.gstatic.com/firebasejs/3.7.4/firebase.js"></script>
+  	<script type="text/javascript" src="assets/javascript/logic.js"></script>
+</body>
+</html>

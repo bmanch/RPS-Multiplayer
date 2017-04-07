@@ -1,0 +1,52 @@
+body {
+	background-image: url(../images/background.jpg);
+	background-position: center center;
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+	background-size: cover;
+}
+
+.jumbotron {
+	background-color: #292F36;
+	color: #F7FFF7;
+}
+
+#join {
+	height: 100px;
+}
+
+.panel {
+	height: 300px;
+	overflow: auto;
+}
+
+.options {
+	display: inline-block;
+	margin: 10px;
+	width: 80px;
+	height: 80px;
+	padding: 10px;
+	border-style: solid;
+	border-color: #2AB7CA;
+	border-width: 2px;
+	background-color: #FE4A49;
+	border-radius: 30px;
+}
+
+.options:hover {
+	cursor: pointer;
+	border-color: #2AB7CA;
+	background-color: #2AB7CA;
+}
+
+#chat {
+	height: 400px;
+	overflow: auto;
+	position: relative;
+}
+
+#input {
+	position: absolute;
+	bottom: 5px;
+	width: 96%;
+}
