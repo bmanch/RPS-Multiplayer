@@ -9,34 +9,27 @@
   firebase.initializeApp(config);
 
 var database = firebase.database();
-
 var newPlayer = "";
-
 var wins1 = 0;
-
 var losses1 = 0;
-
-var ties1 = 0;
-
 var wins2 = 0;
-
 var losses2 = 0;
-
-var ties2 = 0;
-
+var ties = 0;
 var increment = 0;
-
 var playerOneChoice = "";
-
 var playerTwoChoice = "";
-
 var userPlayerCount = 0;
+var playerOneName = "";
+var playerTwoName = "";
+var roundNumber = 0;
 
 $(document).ready(function() {
 
 	database.ref("players").on("value", function(snapshot) {
 		$('#firstPlayer').text(snapshot.val().player1.name);
 		$('#secondPlayer').text(snapshot.val().player2.name);
+		playerOneName = snapshot.val().player1.name;
+		playerTwoName = snapshot.val().player2.name;
 
 		$('#play1').html('<br>Wins: ' + snapshot.val().player1.wins + '<br>Losses: ' + snapshot.val().player1.losses + '<br>Ties: ' + snapshot.val().player1.ties);
 		$('#play2').html('<br>Wins: ' + snapshot.val().player2.wins + '<br>Losses: ' + snapshot.val().player2.losses + '<br>Ties: ' + snapshot.val().player2.ties);
@@ -45,6 +38,7 @@ $(document).ready(function() {
 	database.ref("rounds/round").on("value", function(snapshot) {
 		console.log(snapshot.val() % 2);
 		if (snapshot.val() % 2 === 1) {
+			$('#results').html("");
 			$('#yourChoice1').html("");
 			$('#turnOdd').html("<br><strong>your turn, choose your weapon</strong>");
 			$('#turnEven').html("");
@@ -57,13 +51,24 @@ $(document).ready(function() {
 			$('#playerOnePanel').css('background-color', '#fff');
 			$('#playerTwoPanel').css('background-color', '#FFB86F');
 		}
+		round = snapshot.val();
 	});
 
 	database.ref("results").on("value", function(snapshot) {
 		$('#playerTwoPanel').css('background-color', '#FFF');
+		$('#turnEven').html("");
+		$('#results').css('font-size', '20px');
+		$('#results').css('color', '#B6174B');
 		$('#results').append(snapshot.val().append1);
 		$('#results').append(snapshot.val().append2);
 		$('#results').append(snapshot.val().append3);
+	});
+
+	database.ref("chat").on("value", function(snapshot) {
+		$('#chatMessage').append(snapshot.val().message + "<br>");
+		//the .remove() function below might seem weird, but the chat feature is tied to an "unload" event. Thus, the notification that the user has disconnected would be carried to the next user's chat box unless I delete the chats as they come.
+		//If the user just refreshes the page, then the disconnect message keeps displaying for the other user, but it is unlikely that the user would do this. It is also doesn't mess up game play or chat functionality at all.
+		database.ref("chat").remove();
 	});
 
 	$('#joinButton').on('click', function(event) {
@@ -95,10 +100,10 @@ $(document).ready(function() {
 			name: player,
 			wins: wins1,
 			losses: losses1,
-			ties: ties1	
+			ties: ties
 		});
 
-		localStorage.setItem("user", "player-1");
+		localStorage.setItem("user", player);
 	}
 
 	function addPlayerTwo(player) {
@@ -106,10 +111,10 @@ $(document).ready(function() {
 			name: player,
 			wins: wins2,
 			losses: losses2,
-			ties: ties2
+			ties: ties
 		});
 
-		localStorage.setItem("user", "player-2");
+		localStorage.setItem("user", player);
 		setRound();
 	}
 
@@ -120,41 +125,52 @@ $(document).ready(function() {
 	}
 
 	$('.pick1').on('click', function() {
-		$('#yourChoice1').html('<br><strong>You chose ' + $(this).data('type') + '!</strong>');
-		database.ref("rounds").once("value").then(function(snapshot) {
-			increment = snapshot.val().round + 1;
-			console.log(increment);
-			database.ref("rounds").set({
-				round: increment
-			});
-		});
-		playerOneChoice = $(this).data('type');
-		database.ref("choices/user1").set({
-			choice: playerOneChoice
-		});
-	});
-
-	$('.pick2').on('click', function() {
-		$('#yourChoice2').html('<br><strong>You chose ' + $(this).data('type') + '!</strong>');
-		database.ref("rounds").once("value").then(function(snapshot) {
-			increment = snapshot.val().round + 1;
-			console.log(increment);
-			setTimeout(function(){
+		if (localStorage.getItem("user") === playerOneName && round % 2 === 1) {
+			$('#yourChoice1').html('<br><strong>You chose ' + $(this).data('type') + '!</strong>');
+			database.ref("rounds").once("value").then(function(snapshot) {
+				increment = snapshot.val().round + 1;
+				console.log(increment);
 				database.ref("rounds").set({
 					round: increment
 				});
-			}, 3000);
+			});
+			playerOneChoice = $(this).data('type');
+			database.ref("choices/user1").set({
+				choice: playerOneChoice
+			});
+		} else if (localStorage.getItem("user") === playerTwoName) {
+			alert("Hey " + playerTwoName + "! Only use your area!");
+		} else {
+			alert("Hey " + playerOneName + " wait your turn!");
+		}
+	});
 
-		});
-		playerTwoChoice = $(this).data('type');
-		database.ref("choices/user2").set({
-			choice: playerTwoChoice
-		});
-		gameOutcome();
+	$('.pick2').on('click', function() {
+		if (localStorage.getItem("user") === playerTwoName && round % 2 === 0) {
+			$('#yourChoice2').html('<br><strong>You chose ' + $(this).data('type') + '!</strong>');
+			database.ref("rounds").once("value").then(function(snapshot) {
+				increment = snapshot.val().round + 1;
+				console.log(increment);
+				setTimeout(function(){
+					database.ref("rounds").set({
+						round: increment
+					});
+				}, 3000);
+
+			});
+			playerTwoChoice = $(this).data('type');
+			database.ref("choices/user2").set({
+				choice: playerTwoChoice
+			});
+			gameOutcome();
+		} else if (localStorage.getItem("user") === playerOneName) {
+			alert("Hey " + playerOneName + "! Only use your area!");
+		} else {
+			alert("Hey " + playerTwoName + " wait your turn!");
+		}
 	});
 
 	function gameOutcome() {
-		console.log("gameOutcome");
 		database.ref("choices").once("value").then(function(snapshot) {
 			if (snapshot.val().user1.choice === "rock" && snapshot.val().user2.choice === "scissors") {
 				playerOneWins("rock", "scissors");
@@ -180,88 +196,106 @@ $(document).ready(function() {
 
 	function playerOneWins(user1, user2) {
 		wins1++;
-		// $('#results').append($('#firstPlayer').text() + ' chose ' + user1);
-		// $('#results').append('<br>' + $('#secondPlayer').text() + ' chose ' + user2);
-		// $('#results').append('<br>' + $('#firstPlayer').text() + ' wins!');
+		losses2++;
 		database.ref("results").set({
-			append1: $('#firstPlayer').text() + ' chose ' + user1,
-			append2: '<br>' + $('#secondPlayer').text() + ' chose ' + user2,
-			append3: '<br>' + $('#firstPlayer').text() + ' wins!'
+			append1: playerOneName + ' chose ' + user1,
+			append2: '<br>' + playerTwoName + ' chose ' + user2,
+			append3: '<br>' + playerOneName + ' wins!'
 		});
 
 		database.ref("players/player1").set({
+			name: playerOneName,
 			wins: wins1,
 			losses: losses1,
-			ties: ties1
+			ties: ties
 		});
-		losses2++;
+
 		database.ref("players/player2").set({
+			name: playerTwoName,
 			wins: wins2,
 			losses: losses2,
-			ties: ties2
+			ties: ties
 		});
 	}
 
 	function playerTwoWins(user1, user2) {
 		losses1++;
+		wins2++;
 
 		database.ref("results").set({
-			append1: $('#firstPlayer').text() + ' chose ' + user1,
-			append2: '<br>' + $('#secondPlayer').text() + ' chose ' + user2,
-			append3: '<br>' + $('#secondPlayer').text() + ' wins!'
+			append1: playerOneName + ' chose ' + user1,
+			append2: '<br>' + playerTwoName + ' chose ' + user2,
+			append3: '<br>' + playerTwoName + ' wins!'
 		});
 
 		database.ref("players/player1").set({
+			name: playerOneName,
 			wins: wins1,
 			losses: losses1,
-			ties: ties1
+			ties: ties
 		});
-		wins2++;
+		
 		database.ref("players/player2").set({
+			name: playerTwoName,
 			wins: wins2,
 			losses: losses2,
-			ties: ties2
+			ties: ties
 		});
 	}
 
 	function playersTie(user1, user2) {
-		ties1++;
+		ties++;
 
 		database.ref("results").set({
-			append1: $('#firstPlayer').text() + ' chose ' + user1,
-			append2: '<br>' + $('#secondPlayer').text() + ' chose ' + user2,
+			append1: playerOneName + ' chose ' + user1,
+			append2: '<br>' + playerTwoName + ' chose ' + user2,
 			append3: '<br> It\'s a tie!'
 		});
 
 		database.ref("players/player1").set({
+			name: playerOneName,
 			wins: wins1,
 			losses: losses1,
-			ties: ties1
+			ties: ties
 		});
-		ties2++;
+		
 		database.ref("players/player2").set({
+			name: playerTwoName,
 			wins: wins2,
 			losses: losses2,
-			ties: ties2
+			ties: ties
 		});
 	}
 
-
-	window.onunload = emptyOut();
+	$('#chatButton').on('click', function(event) {
+		event.preventDefault();
+		if ($('#chatText').val().trim() === "") {
+			alert("Hey, you didn't type anything!");
+		} else {
+			database.ref("chat").set({
+				message: localStorage.getItem("user") + ": " + $('#chatText').val().trim()
+			});
+			$('#chatText').val("");
+		}
+	});
 	
-	function emptyOut() {
-		if (localStorage.getItem("user") === "player-1") {
+	$(window).on('unload', function() {
+		database.ref("chat").set({
+			message: localStorage.getItem("user") + " has disconnected."
+		});
+
+		if (localStorage.getItem("user") === playerOneName) {
 			database.ref("players/player1").remove();
 			database.ref("rounds").remove();
 			database.ref("choices").remove();
 			database.ref("results").remove();
 			localStorage.clear();
-		} else if (localStorage.getItem("user") === "player-2") {
+		} else if (localStorage.getItem("user") === playerTwoName) {
 			database.ref("players/player2").remove();
 			database.ref("rounds").remove();
 			database.ref("choices").remove();
 			database.ref("results").remove();
 			localStorage.clear();
 		}
-	}
+	});
 });

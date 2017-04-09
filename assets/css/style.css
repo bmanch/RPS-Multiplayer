@@ -1,14 +1,26 @@
+html {
+	height: 100%;
+}
+
 body {
 	background-image: url(../images/background.jpg);
 	background-position: center center;
 	background-repeat: no-repeat;
 	background-attachment: fixed;
 	background-size: cover;
+	position: relative;
+	min-height: 100%;
 }
 
-.jumbotron {
+#marquee {
 	background-color: #292F36;
 	color: #F7FFF7;
+	margin-bottom: 30px;
+}
+
+#title {
+	padding: 20px;
+	margin: 0;
 }
 
 #join {
@@ -41,12 +53,18 @@ body {
 
 #chat {
 	height: 400px;
-	overflow: auto;
+	overflow: scroll;
 	position: relative;
+	margin-bottom: 100px;
 }
 
 #input {
 	position: absolute;
 	bottom: 5px;
 	width: 96%;
+}
+
+#footer {
+	position: absolute;
+	bottom: 0;
 }

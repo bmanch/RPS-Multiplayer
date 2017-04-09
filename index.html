@@ -8,17 +8,11 @@
 	<link rel="stylesheet" type="text/css" href="assets/css/style.css">
 </head>
 <body>
-	<div class="container">
 
-		<div class="row">
-			<div class="col-sm-12">
-				<div class="jumbotron text-center">
-				  <h1>Rock | Paper | Scissors</h1>
-				  <br>
-				  <p>defeat your nemesis</p>
-				</div>
-			</div>
-		</div>
+	<div class="row text-center" id="marquee">
+		<h1 id="title">Rock | Paper | Scissors</h1>
+	</div>
+	<div class="container">
 
 		<div class="row">
 			<div class="col-sm-offset-3 col-sm-6">
@@ -96,11 +90,11 @@
 				  <div class="panel-heading">
 				    <h3 class="panel-title text-center">Get in their head...</h3>
 				  </div>
-				  <div class="panel-body">
+				  <div class="panel-body" id="chatMessage">
 				    <div class="input-group" id="input">
-				      <input type="text" class="form-control" placeholder="Chat...">
+				      <input type="text" class="form-control" id="chatText" placeholder="Chat...">
 				      <span class="input-group-btn">
-				        <button class="btn btn-default" type="button">Send</button>
+				        <button class="btn btn-default" id="chatButton" type="button">Send</button>
 				      </span>
 				    </div>
 				  </div>
