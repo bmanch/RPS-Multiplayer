@@ -30,7 +30,6 @@ $(document).ready(function() {
 		$('#secondPlayer').text(snapshot.val().player2.name);
 		playerOneName = snapshot.val().player1.name;
 		playerTwoName = snapshot.val().player2.name;
-
 		$('#play1').html('<br>Wins: ' + snapshot.val().player1.wins + '<br>Losses: ' + snapshot.val().player1.losses + '<br>Ties: ' + snapshot.val().player1.ties);
 		$('#play2').html('<br>Wins: ' + snapshot.val().player2.wins + '<br>Losses: ' + snapshot.val().player2.losses + '<br>Ties: ' + snapshot.val().player2.ties);
 	});
@@ -83,6 +82,9 @@ $(document).ready(function() {
 				database.ref("players").once("value").then(function(snapshot) {
 					if (snapshot.child("player1").exists()) {
 						addPlayerTwo(newPlayer);
+					} else if (snapshot.child("player2").exists()) {
+						addPlayerOne(newPlayer);
+						setRound();
 					} else {
 						addPlayerOne(newPlayer);
 					}

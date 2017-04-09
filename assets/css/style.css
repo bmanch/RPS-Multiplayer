@@ -54,14 +54,12 @@ body {
 #chat {
 	height: 400px;
 	overflow: scroll;
-	position: relative;
-	margin-bottom: 100px;
+	margin-bottom: 0;
 }
 
 #input {
-	position: absolute;
-	bottom: 5px;
-	width: 96%;
+	margin-top: 0;
+	margin-bottom: 100px;
 }
 
 #footer {
